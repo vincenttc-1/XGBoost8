@@ -68,26 +68,26 @@ def sentece():
 @app.route('/api/file', methods=["POST"])
 def byFile():
     request_data = request.get_json()
-    data_komentar = request_data['data']
+    data_judul = request_data['data']
 
     arr_text = []
 
-    for f in data_komentar :
+    for f in data_judul :
       arr_text.append(f)
 
     clean_arr_text = list(map(text_preproc,arr_text))
     x_sentence = vectorizer.transform(clean_arr_text)
-    predict = loaded_model.predict(x_sentence)
+    predict = xgb_model_loaded.predict(x_sentence)
 
-    kalimats = []
+    juduls = []
     prediksis = []
     for count,f in enumerate(predict) :
-      kalimat = arr_text[count],
+      judul = arr_text[count],
       prediksi = int(f)
-      kalimats.append(kalimat)
+      juduls.append(judul)
       prediksis.append(prediksi)
 
-    return jsonify({"text":kalimats,"predictions":prediksis})
+    return jsonify({"text":juduls,"predictions":prediksis})
 
 @app.route('/api/testjson', methods=["POST"])
 def postJsonHandler():
